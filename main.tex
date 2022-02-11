@@ -263,9 +263,12 @@ to\hsize{\hfil\box\@tempboxa\hfil}
 %
 % Single address.
 % ---------------
-\name{Orestis Apostolou$^{\star}$ \qquad Vasileios Charisis$^{\star}$ \qquad Georgios Apostolidis$^{\star}$ \qquad Leontios J. Hadjileontiadis$^{\star,\dagger}$}
- \address{$^{\star}$ Department of Electrical \& Computer Eng., Aristotle University of Thessaloniki, GR-54124, Greece\\
- $^{\dagger}$Department of Electrical \& Computer Eng., Khalifa University, PO Box 127788, UAE}
+\name{Orestis Apostolou$^{\star}$ \qquad Vasileios Charisis$^{\star}$ \qquad Georgios Apostolidis$^{\star}$ \qquad Leontios J. Hadjileontiadis$^{\star,\dagger}$\thanks{This research project was funded by the Abu Dhabi Department of Education and Knowledge (ADEK),
+UAE, under the Award for Research Excellence (AARE) 2018, ref. no: 29934 }}
+ \address{$^{\dagger}$Department of Electrical \& Computer Eng., Khalifa University, PO Box 127788, UAE\\
+ $^{\star}$ Department of Electrical \& Computer Eng., Aristotle University of Thessaloniki, GR-54124, Greece}
+ 
+ 
 %
 % For example:
 % ------------
@@ -306,13 +309,13 @@ During the last decade, there has been an exponential rise in the applications w
 
 %One of the engineering fields, which seems to be in its early stages, is the bioengineering field. The much challenging nature of the medical problems, deriving from the multifactor environment in which they are detected, as well as the uncertainty existing in each independent stage and the objective difficulties in coping with scientific issues, are only a few of the factors to be blamed for the slower evolution of this specific field. Even when new innovative methods of dealing with medical issues arise, people tend to be undemonstrative.%
 
-The current study suggests a diagnostic method for CAD \cite{CAD_article}. CAD is the narrowing or the blockage of the heart arteries caused by the buildup of fat, cholesterol, and other substances, a situation known as atherosclerosis. If not detected timely, it can lead to heart failure or death. In 2015, CAD was responsible for 8.9 million deaths (15.6\% of the total deaths in the year), making it the most common death factor globally.
+The current study suggests a diagnostic method for CAD \cite{CAD_article}. CAD is the narrowing or the blockage of the heart arteries caused by the buildup of fat, cholesterol, and other substances, a situation known as atherosclerosis. If not detected timely, it can lead to heart failure or death. In 2015, CAD was responsible for 15.6\% of the total deaths in the year, making it the most common death factor globally.
 
 During the last years, many artificial intelligence algorithms have been created trying to detect CAD at early stages. Most of them use long-duration ECG recordings (24-hour or 15-minute) as input, and with the aid of either classic machine learning or deep learning methods, they predict the existence of CAD.
 Some of those techniques are very effective, approaching the accuracy of 100\% in their predictions. However, those techniques are challenging to use in daily life due to people's limited access to accurate digital ECGs. Even when that access is feasible, it is impractical to utilize this technique for everyday use.
 
 In the current study, we approach the issue from a different perspective. There has been an effort to create a light algorithm that uses ECG recordings of 30 seconds duration, suitable for coping with either noiseless waveforms deriving from electrodes or noisy waveforms coming from smartwatches. Initially, ECGs are separated into R-R intervals, and afterward, each interval is imported into an Autoencoder network. The network tries to reconstruct the initial R-R waveform and estimates the current noise level. If this level exceeds a certain threshold, then the waveform is characterized as noisy. After evaluating each R-R interval, it is adjudicated if the 30-second sample contains a significant amount of noise. If so, the waveform is rejected as noisy. If not, it proceeds in the following stages of the procedure.
-During these following stages, feature extraction is executed, which is followed by a Principal Component Analysis. Then, the modified features are imported into an SVM model to be classified as having CAD or not. The last stage of the algorithm is the evaluation of more recordings coming from the same person so that the final result can be more accurate.
+During these stages, feature extraction is executed, which is followed by a Principal Component Analysis. Then, the modified features are imported into an SVM model to be classified as having CAD or not. The last stage of the algorithm is the evaluation of more recordings coming from the same person so that the final result can be more accurate.
 
 Regarding the structure of the current study, the preprocessing algorithm stages are described in Section 2. In Section 3, all details of constructing the SVM model are presented. The statistical methods used for the final evaluations are included in Section 4. In Section 5, the results of the algorithm and its individual stages are evaluated, and in Section 6, comparisons to other published studies are presented. Finally, Section 7 concludes the paper.
 
@@ -440,10 +443,10 @@ Having finished the preprocessing tasks, the next step is to design a machine le
 
 Even though the subjects selected to participate in the training process diagnosed with CAD were significantly more than the healthy ones (25 against 18), we decided to feed the model with the same number of samples for each class during the training. This has been done so as not to impose another factor of imbalance on the model. Thus, the training was completed using 40000 30-second samples from each class.
 
-\section{EVALUATION ON SUBJECT LEVEL}
+\section{DECISION ON SUBJECT LEVEL}
 \label{sec:subject_evaluation}
 
-In the proposed method, the subject is allowed to use more than one 30-second ECG to detect CAD. It is understandable that a sample of 30 seconds can not contain the same amount of information as a 24-hour recording would. Thus, by using more than one recordings, subjects can enhance the accuracy of their predictions. The algorithm calculates the ratio of the positive to total predictions (excluding the ones that are rejected as noisy). If this ratio exceeds a certain threshold, the subject is characterized as having CAD. Else, he is characterized as not having CAD. A proposed number of samples needed for a reliable result is 10.
+In the proposed method, the subject is allowed to use more than one 30-second ECG to detect CAD. It is understandable that a sample of 30 seconds can not contain the same amount of information as a 24-hour recording would. Thus, by using more than one recording, subjects can enhance the accuracy of their predictions. The algorithm calculates the ratio of the positive to total predictions (excluding the ones that are rejected as noisy). If this ratio exceeds a certain threshold, the subject is characterized as having CAD. Else, he is characterized as not having CAD. A minimum number of 30-second samples for a reliable result was empirically determined to be 10, as a trade-off between practicality and effectiveness.
 
 % Below is an example of how to insert images. Delete the ``\vspace'' line,
 % uncomment the preceding line ``\centerline...'' and replace ``imageX.ps''
@@ -475,21 +478,21 @@ For the individual evaluation of the recordings, the precision of the model was 
 
 Regarding the subjects' evaluation, we had to inspect the ideal threshold of their CAD predictions ratio. For this purpose, we created the ROC curve shown in Figure \ref{fig:roc}. The Area Under Curve (AUC) was calculated to be 0.9897\%. We decided to use 0.5 as a final threshold, meaning that subjects whose ratio of CAD to total predictions is greater than 0.5 will be characterized as having CAD; else, they will be characterized as not having CAD. With the use of this threshold, the total precision was 92.1\%, recall was 98.3\%, f-score was 95.1\%, and accuracy was 93.8\%. These results were evaluated after testing all the available recordings of each subject.
 
-\section{COMPARISON WITH OTHER WORKS}
+\section{COMPARISON AND DISCUSSION}
 \label{sec:comparison}
 
-The problem of automatic detection of CAD has been an active field of research for a long time. Many different approaches have been proposed in the past two decades. Subsequently, we will refer to some of the most popular ones, compare them to our work, and comment on their differences.
+The problem of automatic detection of CAD has been an active field of research for a long time. Various approaches have been proposed in the past two decades. Subsequently, we will refer to some of the most popular ones, compare them to our work, and comment on their differences.
 
 In 2013, Giri et al. \cite{giri} used 15-minute ECGs and an SVM model to achieve accuracy between 85\% to 90\%. In 2017, Dolatabi et al. \cite{dolatabadi} proposed a method using one-lead 24-hour ECGs and an SVM, which reached an accuracy of 99.2\%. Also, Patidar et al. \cite{patidar} used 15-min ECGs and an LS-SVM model to achieve 99.7\% accuracy. Almost all of the previous models achieved better accuracy than our current work; however, the length of the ECG recording that these models need as input would be prohibiting for our present application. Since we try to create a tool that people can use in their everyday life, demanding long ECG recordings as input could not be practical.
 
-As for the models that use shorter time intervals for the detection of CAD, there have been published numerous papers as well. Altan et al. \cite{altan} used 15-second ECGs and a deep belief network and achieved 98.05\% accuracy with a 10-fold validation. Acharya et al. \cite{acharya} had an accuracy of 94.95\% using 5-second ECGS, a CNN, and 10-fold validation as well, while Lih et al. \cite{lih} used 2-second ECGs, a CNN-LSTM network, and 10-fold validation and had the accuracy of 98.51\% for a 4-class problem (one of which was CAD). All of the methods mentioned above have higher accuracy and a smaller ECG duration as input. However, 10-fold validation does not ensure that the testing result is unbiased. There is no evidence that the networks proposed above do not learn to detect and classify imperceptible differences due to each heart's physiology instead of detecting signs of CAD. Thus, we can not be sure that they achieve this accuracy during a completely unbiased testing procedure.
+As for the models that use shorter time intervals, there have been published numerous papers as well. Altan et al. \cite{altan} used 15-second ECGs and a deep belief network and achieved 98.05\% accuracy with a 10-fold validation. Acharya et al. \cite{acharya} had an accuracy of 94.95\% using 5-second ECGS, a CNN, and 10-fold validation as well, while Lih et al. \cite{lih} used 2-second ECGs, a CNN-LSTM network, and 10-fold validation and had the accuracy of 98.51\% for a 4-class problem. All of the methods mentioned above have higher accuracy and a smaller ECG duration as input. However, there is a not negligible probability that cross-validation results in an overestimation of the performance scores, since different subsets may include samples deriving from the same person, allowing the algorithms to perceive impeccable signs deriving from each heart's physiology. Thus, it can not be corroborated in real-life settings.
 
 Finally, Tan et al. \cite{tan} used 5-second one-lead ECG recordings and a CNN and LS network. They also used a subject-specific validation which led to a 99.14\% accuracy on non-CAD subjects and 76.56\% accuracy on CAD subjects. However, the CAD dataset in that research consisted of only seven subjects.
 
 \section{CONCLUSION}
 \label{sec:conclusion}
 
-The method presented in this paper proposes a non-invasive, effective, reliable, and lightweight algorithm for detecting CAD using 30-second ECG recordings. It delivers a subject-specific accuracy of 93.8\% through an unbiased testing procedure. Also, it is designed to accept noisy ECGs derived from smartwatches, and, moreover, it is light enough to be deployed on a regular mobile phone. All of the factors mentioned above make it suitable for an everyday application that can contribute to the early detection of CAD.
+The method presented in this paper proposes a non-invasive, effective, reliable, and lightweight algorithm for detecting CAD using 30-second ECG recordings. It delivers a subject-specific accuracy of 93.8\% through a blind testing procedure. Also, it is designed to accept noisy ECGs derived from smartwatches, and, moreover, it is light enough to be deployed on a regular mobile phone. All of the factors mentioned above make it suitable for an everyday application that can contribute to the early detection of CAD.
 
 \vfill\pagebreak
 
